@@ -3,7 +3,6 @@ package cn.maxpixel.mods.randomsonnature.block.entity;
 import cn.maxpixel.mods.randomsonnature.registry.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class WindTunnelControllerBlockEntity extends BlockEntity {

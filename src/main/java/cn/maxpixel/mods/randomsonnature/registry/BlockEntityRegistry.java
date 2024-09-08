@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class BlockEntityRegistry {
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, RandomsOnNatureMod.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, RandomsOnNatureMod.MODID);
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WindTunnelControllerBlockEntity>> WIND_TUNNEL_CONTROLLER = BLOCK_ENTITIES
             .register(WindTunnelControllerBlock.NAME, () -> BlockEntityType.Builder.of(WindTunnelControllerBlockEntity::new,

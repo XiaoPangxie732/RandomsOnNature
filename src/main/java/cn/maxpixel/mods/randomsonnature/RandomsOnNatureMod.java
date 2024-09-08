@@ -1,7 +1,9 @@
 package cn.maxpixel.mods.randomsonnature;
 
+import cn.maxpixel.mods.randomsonnature.registry.BlockEntityRegistry;
 import cn.maxpixel.mods.randomsonnature.registry.BlockRegistry;
 import cn.maxpixel.mods.randomsonnature.registry.ItemRegistry;
+import cn.maxpixel.mods.randomsonnature.util.I18nUtil;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -21,8 +23,9 @@ public class RandomsOnNatureMod {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = CREATIVE_MODE_TABS.register("main", () -> CreativeModeTab.builder()
-            .title(Component.translatable("itemGroup.randomsonnature")) //The language key for the title of your CreativeModeTab
+    public static final String MAIN_TAB_NAME = "main";
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = CREATIVE_MODE_TABS.register(MAIN_TAB_NAME, () -> CreativeModeTab.builder()
+            .title(Component.translatable(I18nUtil.makeItemGroup(MAIN_TAB_NAME))) //The language key for the title of your CreativeModeTab
             .icon(() -> BlockRegistry.WIND_TUNNEL_CONTROLLER.asItem().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(BlockRegistry.WIND_TUNNEL_CONTROLLER.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
@@ -31,8 +34,9 @@ public class RandomsOnNatureMod {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public RandomsOnNatureMod(IEventBus modEventBus, ModContainer modContainer) {
-        BlockRegistry.register(modEventBus);
-        ItemRegistry.register(modEventBus);
+        BlockRegistry.BLOCKS.register(modEventBus);
+        BlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
+        ItemRegistry.ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
     }
 }

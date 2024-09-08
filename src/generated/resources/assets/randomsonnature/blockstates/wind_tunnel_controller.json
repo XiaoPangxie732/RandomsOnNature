@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "randomsonnature:block/wind_tunnel_controller"
+    }
+  }
+}
