@@ -1,6 +1,7 @@
 package cn.maxpixel.mods.randomsonnature.datagen;
 
 import cn.maxpixel.mods.randomsonnature.registry.BlockRegistry;
+import com.google.common.collect.Iterables;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -16,10 +17,7 @@ public class BlockLoot extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return BlockRegistry.BLOCKS.getEntries()
-                .stream()
-                .<Block>map(DeferredHolder::value)
-                .toList();
+        return Iterables.transform(BlockRegistry.BLOCKS.getEntries(), DeferredHolder::value);
     }
 
     @Override

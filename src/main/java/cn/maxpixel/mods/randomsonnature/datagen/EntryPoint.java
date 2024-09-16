@@ -26,7 +26,7 @@ public class EntryPoint {
         generator.addProvider(event.includeClient(), (DataProvider.Factory<AmericanEnglishLanguageProvider>) AmericanEnglishLanguageProvider::new);
 
         generator.addProvider(event.includeClient(), new BlockStates(output, efh));
-        generator.addProvider(event.includeServer(), (DataProvider.Factory<LootTableProvider>) o -> new LootTableProvider(o, Set.of(), List.of(
+        generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK)
         ), event.getLookupProvider()));
     }
