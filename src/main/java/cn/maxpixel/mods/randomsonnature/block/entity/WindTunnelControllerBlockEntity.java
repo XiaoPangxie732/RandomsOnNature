@@ -31,6 +31,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
     public static final int MAX_RADIUS = 8;
     private int radius = 0;
     private AABB area;
+    @UsedOn(UsedOn.Side.SERVER)
     private List<ServerPlayer> oldPlayers = List.of();
     @UsedOn(UsedOn.Side.CLIENT)
     private boolean lastTickHere;
@@ -79,8 +80,8 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
             int old = be.radius;
             int radius = be.radius = structureCheck(level, pos);
             if (radius == 0) {
-                level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
                 be.area = null;
+                level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
             } else if (old != radius) {
                 be.area = new AABB(
                         pos.getX() - radius,
@@ -116,6 +117,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
         }
     }
 
+    @UsedOn(UsedOn.Side.CLIENT)
     public static void clientTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
         if (be.area != null) {
             var player = Minecraft.getInstance().player;
