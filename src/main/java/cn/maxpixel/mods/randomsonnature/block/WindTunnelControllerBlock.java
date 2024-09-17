@@ -38,6 +38,7 @@ public class WindTunnelControllerBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, BlockEntityRegistry.WIND_TUNNEL_CONTROLLER.get(), WindTunnelControllerBlockEntity::serverTick);
+        return level.isClientSide ? createTickerHelper(type, BlockEntityRegistry.WIND_TUNNEL_CONTROLLER.get(), WindTunnelControllerBlockEntity::clientTick) :
+                createTickerHelper(type, BlockEntityRegistry.WIND_TUNNEL_CONTROLLER.get(), WindTunnelControllerBlockEntity::serverTick);
     }
 }
