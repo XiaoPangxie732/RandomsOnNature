@@ -14,6 +14,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,6 +30,7 @@ import java.util.List;
 public class WindTunnelControllerBlockEntity extends BlockEntity {
     public static final String KEY_RADIUS = "radius";
     public static final int MAX_RADIUS = 8;
+    public static final int HEIGHT = 20;
     private int radius = 0;
     private AABB area;
     @UsedOn(UsedOn.Side.SERVER)
@@ -63,7 +65,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                     worldPosition.getY(),
                     worldPosition.getZ() - radius,
                     worldPosition.getX() + radius + 1,
-                    worldPosition.getY() + 20,
+                    worldPosition.getY() + HEIGHT,
                     worldPosition.getZ() + radius + 1
             );
         }
@@ -105,14 +107,9 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
             be.oldPlayers = players;
             for (var player : players) {
                 boolean flying = !player.onGround();
-                if (flying) {
-                    player.setForcedPose(Pose.FALL_FLYING);
-                } else {
-                    player.setForcedPose(null);
-                }
-                if (flying) {
-                    player.addDeltaMovement(new Vec3(0.0, 0.1, 0.0));
-                }
+                if (flying) player.setForcedPose(Pose.FALL_FLYING);
+                else player.setForcedPose(null);
+                if (flying) applyMotionToPlayer(be, player);
             }
         }
     }
@@ -126,14 +123,22 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                 if (flying) player.setForcedPose(Pose.FALL_FLYING);
                 else player.setForcedPose(null);
                 be.lastTickHere = true;
-                if (flying) {
-                    player.addDeltaMovement(new Vec3(0.0, 0.1, 0.0));
-                }
+                if (flying) applyMotionToPlayer(be, player);
             } else if (be.lastTickHere) {
                 player.setForcedPose(null);
                 be.lastTickHere = false;
             }
         }
+    }
+
+    private static void applyMotionToPlayer(WindTunnelControllerBlockEntity be, Player player) {
+        Vec3 delta = player.getDeltaMovement();
+        double strength = Mth.lerp((be.area.maxY - player.getY()) / HEIGHT, 0.5, 1.0);
+        player.setDeltaMovement(
+                delta.x * 1.4 * strength,
+                delta.y + player.getGravity() * 2 * strength * Mth.lerp(Math.abs(player.getXRot()) / 90., 1.0, 0.4),
+                delta.z * 1.4 * strength
+        );
     }
 
     private static int structureCheck(Level level, BlockPos blockPos) {

@@ -2,9 +2,13 @@ package cn.maxpixel.mods.randomsonnature.registry;
 
 import cn.maxpixel.mods.randomsonnature.RandomsOnNatureMod;
 import cn.maxpixel.mods.randomsonnature.block.WindTunnelControllerBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.neoforged.bus.api.IEventBus;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -17,10 +21,38 @@ public class BlockRegistry {
             new WindTunnelControllerBlock(BlockBehaviour.Properties.of()
                     .strength(2.f, 10.f)
             ));
+    public static final DeferredBlock<Block> WOOD_CHARCOAL_BLOCK = registerWithItem("wood_charcoal_block", () ->
+            new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F)
+            ));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_OAK_LOG = registerWithItem("lightning_struck_oak_log", () ->
+            log(MapColor.WOOD, MapColor.PODZOL));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_SPRUCE_LOG = registerWithItem("lightning_struck_spruce_log", () ->
+            log(MapColor.PODZOL, MapColor.COLOR_BROWN));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_BIRCH_LOG = registerWithItem("lightning_struck_birch_log", () ->
+            log(MapColor.SAND, MapColor.QUARTZ));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_JUNGLE_LOG = registerWithItem("lightning_struck_jungle_log", () ->
+            log(MapColor.DIRT, MapColor.PODZOL));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_ACACIA_LOG = registerWithItem("lightning_struck_acacia_log", () ->
+            log(MapColor.COLOR_ORANGE, MapColor.STONE));
+    public static final DeferredBlock<Block> LIGHTNING_STRUCK_DARK_OAK_LOG = registerWithItem("lightning_struck_dark_oak_log", () ->
+            log(MapColor.COLOR_BROWN, MapColor.COLOR_BROWN));
 
     private static <T extends Block> DeferredBlock<T> registerWithItem(String name, Supplier<T> sup) {
         var block = BLOCKS.register(name, sup);
         ItemRegistry.registerBlockItem(name, block);
         return block;
+    }
+
+    private static Block log(MapColor topMapColor, MapColor sideMapColor) {
+        return new RotatedPillarBlock(BlockBehaviour.Properties.of()
+                .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? topMapColor : sideMapColor)
+                .instrument(NoteBlockInstrument.BASS)
+                .strength(2.0F)
+                .sound(SoundType.WOOD)
+        );
     }
 }

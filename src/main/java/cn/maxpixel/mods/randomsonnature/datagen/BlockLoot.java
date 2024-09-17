@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -23,5 +24,6 @@ public class BlockLoot extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropSelf(BlockRegistry.WIND_TUNNEL_CONTROLLER.get());
+        dropOther(BlockRegistry.WOOD_CHARCOAL_BLOCK.get(), Items.CHARCOAL);
     }
 }
