@@ -25,5 +25,17 @@ public class BlockLoot extends BlockLootSubProvider {
     protected void generate() {
         dropSelf(BlockRegistry.WIND_TUNNEL_CONTROLLER.get());
         dropOther(BlockRegistry.WOOD_CHARCOAL_BLOCK.get(), Items.CHARCOAL);
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_OAK_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS.get());
+        dropSelf(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS.get());
     }
 }

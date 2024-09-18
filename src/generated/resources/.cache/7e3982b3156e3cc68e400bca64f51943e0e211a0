@@ -1,0 +1,5 @@
+// 1.21.1	2024-09-19T03:37:27.9911016	Tags for minecraft:block mod id randomsonnature
+a7bce5858935134c1a2d2c6a57d786679e12415e data/minecraft/tags/block/logs.json
+a7bce5858935134c1a2d2c6a57d786679e12415e data/minecraft/tags/block/mineable/axe.json
+8eb42aa018adb59b6256f2b353add5808309297a data/minecraft/tags/block/mineable/pickaxe.json
+17d8c6092c8e7365742fbdaddecada334960601d data/randomsonnature/tags/block/lightning_powered_logs.json

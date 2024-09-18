@@ -20,6 +20,7 @@ public class EntryPoint {
         var generator = event.getGenerator();
         var output = generator.getPackOutput();
         var efh = event.getExistingFileHelper();
+        var lookup = event.getLookupProvider();
 
         // Languages
         generator.addProvider(event.includeClient(), (DataProvider.Factory<SimplifiedChineseLanguageProvider>) SimplifiedChineseLanguageProvider::new);
@@ -28,6 +29,7 @@ public class EntryPoint {
         generator.addProvider(event.includeClient(), new BlockStates(output, efh));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK)
-        ), event.getLookupProvider()));
+        ), lookup));
+        generator.addProvider(event.includeServer(), new BlockTags(output, lookup, efh));
     }
 }

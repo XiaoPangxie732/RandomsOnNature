@@ -4,18 +4,17 @@ import cn.maxpixel.mods.randomsonnature.registry.BlockEntityRegistry;
 import cn.maxpixel.mods.randomsonnature.registry.BlockRegistry;
 import cn.maxpixel.mods.randomsonnature.registry.ItemRegistry;
 import cn.maxpixel.mods.randomsonnature.util.I18nUtil;
-import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.slf4j.Logger;
 
 @Mod(RandomsOnNatureMod.MODID)
 public class RandomsOnNatureMod {
@@ -28,7 +27,20 @@ public class RandomsOnNatureMod {
             .title(Component.translatable(I18nUtil.makeItemGroup(MAIN_TAB_NAME))) //The language key for the title of your CreativeModeTab
             .icon(() -> BlockRegistry.WIND_TUNNEL_CONTROLLER.asItem().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(BlockRegistry.WIND_TUNNEL_CONTROLLER.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(BlockRegistry.WIND_TUNNEL_CONTROLLER); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(BlockRegistry.WOOD_CHARCOAL_BLOCK);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_OAK_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS);
+                output.accept(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS);
             }).build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
@@ -38,5 +50,9 @@ public class RandomsOnNatureMod {
         BlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+    }
+
+    public static ResourceLocation rl(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }
