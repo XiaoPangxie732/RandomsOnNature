@@ -115,20 +115,27 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
     }
 
     @UsedOn(UsedOn.Side.CLIENT)
-    public static void clientTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
-        if (be.area != null) {
-            var player = Minecraft.getInstance().player;
-            if (player.getBoundingBox().intersects(be.area)) {
-                boolean flying = !player.onGround();
-                if (flying) player.setForcedPose(Pose.FALL_FLYING);
-                else player.setForcedPose(null);
-                be.lastTickHere = true;
-                if (flying) applyMotionToPlayer(be, player);
-            } else if (be.lastTickHere) {
-                player.setForcedPose(null);
-                be.lastTickHere = false;
+    private static class ClientOnly {
+        public static void clientTick(WindTunnelControllerBlockEntity be) {
+            if (be.area != null) {
+                var player = Minecraft.getInstance().player;
+                if (player.getBoundingBox().intersects(be.area)) {
+                    boolean flying = !player.onGround();
+                    if (flying) player.setForcedPose(Pose.FALL_FLYING);
+                    else player.setForcedPose(null);
+                    be.lastTickHere = true;
+                    if (flying) applyMotionToPlayer(be, player);
+                } else if (be.lastTickHere) {
+                    player.setForcedPose(null);
+                    be.lastTickHere = false;
+                }
             }
         }
+    }
+
+    @UsedOn(UsedOn.Side.CLIENT)
+    public static void clientTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
+        ClientOnly.clientTick(be);
     }
 
     private static void applyMotionToPlayer(WindTunnelControllerBlockEntity be, Player player) {

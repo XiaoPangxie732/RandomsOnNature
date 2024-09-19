@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Indicates that this field is only used on the specific side
  */
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
 public @interface UsedOn {
     Side value();
