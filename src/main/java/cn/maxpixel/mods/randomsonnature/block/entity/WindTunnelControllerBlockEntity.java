@@ -13,7 +13,11 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -77,6 +81,10 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
         if (!tag.isEmpty()) handleUpdateTag(tag, lookupProvider);
     }
 
+    private static boolean canBeBlown(Player p) {
+        return !p.onGround() && !(p.isCreative() && p.getAbilities().flying);
+    }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
         if (level.getGameTime() % 20 == 0) {
             int old = be.radius;
@@ -106,21 +114,33 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
             }
             be.oldPlayers = players;
             for (var player : players) {
-                boolean flying = !player.onGround();
+                boolean flying = canBeBlown(player);
                 if (flying) player.setForcedPose(Pose.FALL_FLYING);
                 else player.setForcedPose(null);
                 if (flying) applyMotionToPlayer(be, player);
+            }
+            applyMotionToItems(be, level.getEntitiesOfClass(ItemEntity.class, be.area));
+            for (Entity entity : level.getEntitiesOfClass(Entity.class, be.area, EntitySelector.NO_SPECTATORS
+                    .and(EntitySelector.ENTITY_STILL_ALIVE)
+                    .and(e -> (e instanceof LivingEntity) && !(e instanceof Player))
+            )) {
+                entity.addDeltaMovement(new Vec3(
+                        0.0,
+                        entity.getGravity() * 1.3 * Mth.lerp((be.area.maxY - entity.getY()) / HEIGHT, 0.3, 1.0)
+                                + Math.random() * 0.05,
+                        0.0
+                ));
             }
         }
     }
 
     @UsedOn(UsedOn.Side.CLIENT)
     private static class ClientOnly {
-        public static void clientTick(WindTunnelControllerBlockEntity be) {
+        public static void clientTick(Level level, WindTunnelControllerBlockEntity be) {
             if (be.area != null) {
                 var player = Minecraft.getInstance().player;
                 if (player.getBoundingBox().intersects(be.area)) {
-                    boolean flying = !player.onGround();
+                    boolean flying = canBeBlown(player);
                     if (flying) player.setForcedPose(Pose.FALL_FLYING);
                     else player.setForcedPose(null);
                     be.lastTickHere = true;
@@ -129,23 +149,35 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                     player.setForcedPose(null);
                     be.lastTickHere = false;
                 }
+                applyMotionToItems(be, level.getEntitiesOfClass(ItemEntity.class, be.area));
             }
         }
     }
 
     @UsedOn(UsedOn.Side.CLIENT)
     public static void clientTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
-        ClientOnly.clientTick(be);
+        ClientOnly.clientTick(level, be);
     }
 
     private static void applyMotionToPlayer(WindTunnelControllerBlockEntity be, Player player) {
+        player.resetFallDistance();
         Vec3 delta = player.getDeltaMovement();
-        double strength = Mth.lerp((be.area.maxY - player.getY()) / HEIGHT, 0.5, 1.0);
+        double strength = Mth.lerp((be.area.maxY - player.getY()) / HEIGHT, 0.3, 1.0);
         player.setDeltaMovement(
-                delta.x * 1.4 * strength,
+                Mth.clamp(delta.x * 1.4 * strength, -.2, .2),
                 delta.y + player.getGravity() * 2 * strength * Mth.lerp(Math.abs(player.getXRot()) / 90., 1.0, 0.4),
-                delta.z * 1.4 * strength
+                Mth.clamp(delta.z * 1.4 * strength, -.2, .2)
         );
+    }
+
+    private static void applyMotionToItems(WindTunnelControllerBlockEntity be, List<ItemEntity> items) {
+        for (ItemEntity item : items) {
+            item.addDeltaMovement(new Vec3(
+                    0.0,
+                    item.getGravity() * 1.5 * Mth.lerp((be.area.maxY - item.getY()) / HEIGHT, 0.3, 1.0),
+                    0.0
+            ));
+        }
     }
 
     private static int structureCheck(Level level, BlockPos blockPos) {
