@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -60,19 +59,8 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
 
     @Override
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-        int old = radius;
         radius = Mth.clamp(tag.getInt(KEY_RADIUS), 0, MAX_RADIUS);
-        if (radius == 0) area = null;
-        else if (old != radius) {
-            area = new AABB(
-                    worldPosition.getX() - radius,
-                    worldPosition.getY(),
-                    worldPosition.getZ() - radius,
-                    worldPosition.getX() + radius + 1,
-                    worldPosition.getY() + HEIGHT,
-                    worldPosition.getZ() + radius + 1
-            );
-        }
+        area = makeBoundingBox(worldPosition, radius);
     }
 
     @Override
@@ -88,19 +76,12 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
     public static void serverTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
         if (level.getGameTime() % 20 == 0) {
             int old = be.radius;
-            int radius = be.radius = structureCheck(level, pos);
-            if (radius == 0) {
-                be.area = null;
+            be.radius = structureCheck(level, pos);
+            if (old != be.radius) {
+                be.area = makeBoundingBox(pos, be.radius);
                 level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
-            } else if (old != radius) {
-                be.area = new AABB(
-                        pos.getX() - radius,
-                        pos.getY(),
-                        pos.getZ() - radius,
-                        pos.getX() + radius + 1,
-                        pos.getY() + 20,
-                        pos.getZ() + radius + 1
-                );
+            } else if (be.area == null) {
+                be.area = makeBoundingBox(pos, 0);
                 level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
             }
         }
@@ -120,9 +101,8 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                 if (flying) applyMotionToPlayer(be, player);
             }
             applyMotionToItems(be, level.getEntitiesOfClass(ItemEntity.class, be.area));
-            for (Entity entity : level.getEntitiesOfClass(Entity.class, be.area, EntitySelector.NO_SPECTATORS
-                    .and(EntitySelector.ENTITY_STILL_ALIVE)
-                    .and(e -> (e instanceof LivingEntity) && !(e instanceof Player))
+            for (Entity entity : level.getEntitiesOfClass(Entity.class, be.area,
+                    EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(e -> !(e instanceof Player))
             )) {
                 entity.addDeltaMovement(new Vec3(
                         0.0,
@@ -139,7 +119,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
         public static void clientTick(Level level, WindTunnelControllerBlockEntity be) {
             if (be.area != null) {
                 var player = Minecraft.getInstance().player;
-                if (player.getBoundingBox().intersects(be.area)) {
+                if (!player.isSpectator() && player.getBoundingBox().intersects(be.area)) {
                     boolean flying = canBeBlown(player);
                     if (flying) player.setForcedPose(Pose.FALL_FLYING);
                     else player.setForcedPose(null);
@@ -164,9 +144,9 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
         Vec3 delta = player.getDeltaMovement();
         double strength = Mth.lerp((be.area.maxY - player.getY()) / HEIGHT, 0.3, 1.0);
         player.setDeltaMovement(
-                Mth.clamp(delta.x * 1.4 * strength, -.2, .2),
+                Mth.clamp(delta.x * 1.5 * strength, -.2, .2),
                 delta.y + player.getGravity() * 2 * strength * Mth.lerp(Math.abs(player.getXRot()) / 90., 1.0, 0.4),
-                Mth.clamp(delta.z * 1.4 * strength, -.2, .2)
+                Mth.clamp(delta.z * 1.5 * strength, -.2, .2)
         );
     }
 
@@ -209,7 +189,22 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
         return radius;
     }
 
+    private static AABB makeBoundingBox(BlockPos pos, int radius) {
+        return new AABB(
+                pos.getX() - radius,
+                pos.getY() + 1,
+                pos.getZ() - radius,
+                pos.getX() + radius + 1,
+                pos.getY() + HEIGHT,
+                pos.getZ() + radius + 1
+        );
+    }
+
     public int getRadius() {
         return radius;
+    }
+
+    public AABB getArea() {
+        return area;
     }
 }
