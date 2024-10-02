@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "randomsonnature:block/lightning_powered_oak_log_top",
+    "side": "randomsonnature:block/lightning_powered_oak_log"
+  }
+}

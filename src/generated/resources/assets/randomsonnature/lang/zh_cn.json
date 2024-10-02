@@ -1,4 +1,19 @@
 {
+  "block.randomsonnature.lightning_powered_acacia_log": "雷劈的金合欢原木",
+  "block.randomsonnature.lightning_powered_acacia_planks": "雷劈的金合欢木板",
+  "block.randomsonnature.lightning_powered_birch_log": "雷劈的白桦原木",
+  "block.randomsonnature.lightning_powered_birch_planks": "雷劈的白桦木板",
+  "block.randomsonnature.lightning_powered_dark_oak_log": "雷劈的暗黑橡木原木",
+  "block.randomsonnature.lightning_powered_dark_oak_planks": "雷劈的暗黑橡木木板",
+  "block.randomsonnature.lightning_powered_jungle_log": "雷劈的丛林原木",
+  "block.randomsonnature.lightning_powered_jungle_planks": "雷劈的丛林木板",
+  "block.randomsonnature.lightning_powered_oak_log": "雷劈的橡木原木",
+  "block.randomsonnature.lightning_powered_oak_planks": "雷劈的橡木木板",
+  "block.randomsonnature.lightning_powered_spruce_log": "雷劈的云杉原木",
+  "block.randomsonnature.lightning_powered_spruce_planks": "雷劈的云杉木板",
   "block.randomsonnature.wind_tunnel_controller": "风洞控制器",
+  "block.randomsonnature.wood_charcoal_block": "原木的木炭块",
+  "item.randomsonnature.lightning_powered_wooden_axe": "雷劈的木斧",
+  "item.randomsonnature.lightning_powered_wooden_sword": "雷劈的木剑",
   "itemGroup.randomsonnature.main": "随想自然"
 }

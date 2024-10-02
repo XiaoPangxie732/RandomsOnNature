@@ -28,17 +28,17 @@ public class BlockRegistry {
                     .requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F)
             ));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_OAK_LOG = registerWithItem("lightning_powered_oak_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_OAK_LOG = registerWithItem("lightning_powered_oak_log", () ->
             log(MapColor.WOOD, MapColor.PODZOL));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_SPRUCE_LOG = registerWithItem("lightning_powered_spruce_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_SPRUCE_LOG = registerWithItem("lightning_powered_spruce_log", () ->
             log(MapColor.PODZOL, MapColor.COLOR_BROWN));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_BIRCH_LOG = registerWithItem("lightning_powered_birch_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_BIRCH_LOG = registerWithItem("lightning_powered_birch_log", () ->
             log(MapColor.SAND, MapColor.QUARTZ));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_JUNGLE_LOG = registerWithItem("lightning_powered_jungle_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_JUNGLE_LOG = registerWithItem("lightning_powered_jungle_log", () ->
             log(MapColor.DIRT, MapColor.PODZOL));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_ACACIA_LOG = registerWithItem("lightning_powered_acacia_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_ACACIA_LOG = registerWithItem("lightning_powered_acacia_log", () ->
             log(MapColor.COLOR_ORANGE, MapColor.STONE));
-    public static final DeferredBlock<Block> LIGHTNING_POWERED_DARK_OAK_LOG = registerWithItem("lightning_powered_dark_oak_log", () ->
+    public static final DeferredBlock<RotatedPillarBlock> LIGHTNING_POWERED_DARK_OAK_LOG = registerWithItem("lightning_powered_dark_oak_log", () ->
             log(MapColor.COLOR_BROWN, MapColor.COLOR_BROWN));
     public static final DeferredBlock<Block> LIGHTNING_POWERED_OAK_PLANKS = registerWithItem("lightning_powered_oak_planks",
             () -> planks(MapColor.WOOD));
@@ -59,7 +59,7 @@ public class BlockRegistry {
         return block;
     }
 
-    private static Block log(MapColor topMapColor, MapColor sideMapColor) {
+    private static RotatedPillarBlock log(MapColor topMapColor, MapColor sideMapColor) {
         return new RotatedPillarBlock(BlockBehaviour.Properties.of()
                 .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? topMapColor : sideMapColor)
                 .instrument(NoteBlockInstrument.BASS)

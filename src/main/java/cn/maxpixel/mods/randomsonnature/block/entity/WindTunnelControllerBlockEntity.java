@@ -3,6 +3,7 @@ package cn.maxpixel.mods.randomsonnature.block.entity;
 import cn.maxpixel.mods.randomsonnature.annotations.UsedOn;
 import cn.maxpixel.mods.randomsonnature.registry.BlockEntityRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -18,6 +19,8 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -70,7 +73,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
     }
 
     private static boolean canBeBlown(Player p) {
-        return !p.onGround() && !(p.isCreative() && p.getAbilities().flying);
+        return !p.onGround() && !(p.isCreative() && p.getAbilities().flying) && !p.isPassenger();
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, WindTunnelControllerBlockEntity be) {
@@ -101,6 +104,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                 if (flying) applyMotionToPlayer(be, player);
             }
             applyMotionToItems(be, level.getEntitiesOfClass(ItemEntity.class, be.area));
+            applyMotionToVehicles(be, level.getEntitiesOfClass(VehicleEntity.class, be.area));
             for (Entity entity : level.getEntitiesOfClass(Entity.class, be.area,
                     EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(e -> !(e instanceof Player))
             )) {
@@ -130,6 +134,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
                     be.lastTickHere = false;
                 }
                 applyMotionToItems(be, level.getEntitiesOfClass(ItemEntity.class, be.area));
+                applyMotionToVehicles(be, level.getEntitiesOfClass(VehicleEntity.class, be.area));
             }
         }
     }
@@ -141,13 +146,14 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
 
     private static void applyMotionToPlayer(WindTunnelControllerBlockEntity be, Player player) {
         player.resetFallDistance();
-        Vec3 delta = player.getDeltaMovement();
         double strength = Mth.lerp((be.area.maxY - player.getY()) / HEIGHT, 0.3, 1.0);
-        player.setDeltaMovement(
-                Mth.clamp(delta.x * 1.5 * strength, -.2, .2),
-                delta.y + player.getGravity() * 2 * strength * Mth.lerp(Math.abs(player.getXRot()) / 90., 1.0, 0.4),
-                Mth.clamp(delta.z * 1.5 * strength, -.2, .2)
-        );
+        if (player.level().isClientSide && player instanceof LocalPlayer local) {
+            player.moveRelative(.1f * (float) strength,
+                    new Vec3(Math.signum(local.input.leftImpulse), 0d, Math.signum(local.input.forwardImpulse)));
+        }
+        player.addDeltaMovement(new Vec3(
+                0, player.getGravity() * 2 * strength * Mth.lerp(Math.abs(player.getXRot()) / 90., 1.0, 0.4), 0
+        ));
     }
 
     private static void applyMotionToItems(WindTunnelControllerBlockEntity be, List<ItemEntity> items) {
@@ -155,6 +161,19 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
             item.addDeltaMovement(new Vec3(
                     0.0,
                     item.getGravity() * 1.5 * Mth.lerp((be.area.maxY - item.getY()) / HEIGHT, 0.3, 1.0),
+                    0.0
+            ));
+        }
+    }
+
+    private static void applyMotionToVehicles(WindTunnelControllerBlockEntity be, List<VehicleEntity> vehicles) {
+        for (VehicleEntity vehicle : vehicles) {
+            double multiplier = vehicle instanceof Boat ? vehicle.isVehicle() ? 3.0 : 1.7 : 1.5;
+            vehicle.resetFallDistance();
+            vehicle.addDeltaMovement(new Vec3(
+                    0.0,
+                    vehicle.getGravity() * multiplier * Mth.lerp((be.area.maxY - vehicle.getY()) / HEIGHT, 0.5, 1.0) +
+                            Math.random() * (vehicle instanceof Boat ? 0.01 : 0.2),
                     0.0
             ));
         }

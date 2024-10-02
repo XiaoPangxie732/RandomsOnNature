@@ -1,0 +1,7 @@
+{
+  "parent": "randomsonnature:block/lightning_powered_jungle_log",
+  "textures": {
+    "end": "randomsonnature:block/lightning_powered_jungle_log_top",
+    "side": "randomsonnature:block/lightning_powered_jungle_log"
+  }
+}

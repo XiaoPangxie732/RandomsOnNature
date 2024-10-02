@@ -1,0 +1,7 @@
+{
+  "parent": "randomsonnature:block/lightning_powered_dark_oak_log",
+  "textures": {
+    "end": "randomsonnature:block/lightning_powered_dark_oak_log_top",
+    "side": "randomsonnature:block/lightning_powered_dark_oak_log"
+  }
+}

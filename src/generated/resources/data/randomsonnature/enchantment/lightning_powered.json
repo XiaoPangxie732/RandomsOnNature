@@ -1,0 +1,110 @@
+{
+  "anvil_cost": 100,
+  "description": {
+    "translate": "enchantment.randomsonnature.lightning_powered"
+  },
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2.5,
+            "per_level_above_first": 1.0
+          }
+        }
+      }
+    ],
+    "minecraft:knockback": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 0.5,
+            "per_level_above_first": 0.5
+          }
+        }
+      }
+    ],
+    "minecraft:post_attack": [
+      {
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:ignite",
+          "duration": {
+            "type": "minecraft:linear",
+            "base": 1.5,
+            "per_level_above_first": 1.5
+          }
+        },
+        "enchanted": "attacker",
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        }
+      },
+      {
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:summon_entity",
+              "entity": "minecraft:lightning_bolt"
+            },
+            {
+              "type": "minecraft:play_sound",
+              "pitch": 1.0,
+              "sound": "minecraft:item.trident.thunder",
+              "volume": 5.0
+            }
+          ]
+        },
+        "enchanted": "attacker",
+        "requirements": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:weather_check",
+              "thundering": true
+            },
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "location": {
+                  "can_see_sky": true
+                }
+              }
+            },
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "direct_attacker",
+              "predicate": {
+                "type": "minecraft:trident"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_level": 5,
+  "min_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#randomsonnature:can_be_lightning_powered_weapons",
+  "weight": 1
+}
