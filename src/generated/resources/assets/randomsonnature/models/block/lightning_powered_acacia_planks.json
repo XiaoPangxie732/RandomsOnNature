@@ -1,5 +1,5 @@
 {
-  "parent": "randomsonnature:block/lightning_powered_acacia_planks",
+  "parent": "minecraft:block/cube_all",
   "textures": {
     "all": "randomsonnature:block/lightning_powered_acacia_planks"
   }

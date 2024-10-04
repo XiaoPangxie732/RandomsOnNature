@@ -1,9 +1,11 @@
 package cn.maxpixel.mods.randomsonnature.datagen.lang;
 
 import cn.maxpixel.mods.randomsonnature.RandomsOnNatureMod;
+import cn.maxpixel.mods.randomsonnature.datagen.Enchantments;
 import cn.maxpixel.mods.randomsonnature.registry.BlockRegistry;
 import cn.maxpixel.mods.randomsonnature.registry.ItemRegistry;
 import cn.maxpixel.mods.randomsonnature.util.I18nUtil;
+import net.minecraft.Util;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
@@ -35,5 +37,7 @@ public class AmericanEnglishLanguageProvider extends LanguageProvider {
 
         addItem(ItemRegistry.LIGHTNING_POWERED_WOODEN_SWORD, "Lightning-Powered Wooden Sword");
         addItem(ItemRegistry.LIGHTNING_POWERED_WOODEN_AXE, "Lightning-Powered Wooden Axe");
+
+        add(Util.makeDescriptionId("enchantment", Enchantments.LIGHTNING_POWERED.location()), "Lightning Powered");
     }
 }

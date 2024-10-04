@@ -1,5 +1,5 @@
 {
-  "parent": "randomsonnature:block/lightning_powered_acacia_log",
+  "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "randomsonnature:block/lightning_powered_acacia_log_top",
     "side": "randomsonnature:block/lightning_powered_acacia_log"

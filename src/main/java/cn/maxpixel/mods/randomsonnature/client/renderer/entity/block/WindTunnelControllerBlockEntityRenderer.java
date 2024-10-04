@@ -39,7 +39,6 @@ public class WindTunnelControllerBlockEntityRenderer implements BlockEntityRende
 
     @Override
     public void render(WindTunnelControllerBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        poseStack.pushPose();
         poseStack.translate(.5f, 1.001f, .5f);
         poseStack.scale(be.getRadius() * 2 + .9f, 1, be.getRadius() * 2 + .9f);
         poseStack.rotateAround(Axis.YP.rotation(Mth.TWO_PI * (be.getLevel().getGameTime() % 5 + partialTick) / 5), 0.f, 0.f, 0.f);
@@ -52,7 +51,6 @@ public class WindTunnelControllerBlockEntityRenderer implements BlockEntityRende
         vc.addVertex(poseStack.last(), -0.5f, 0f, UNIT).setColor(COLOR, COLOR, COLOR, 0xff).setLight(packedLight);
         vc.addVertex(poseStack.last(), 0.5f, 0f, UNIT).setColor(COLOR, COLOR, COLOR, 0xff).setLight(packedLight);
         vc.addVertex(poseStack.last(), 0.5f, 0f, -UNIT).setColor(COLOR, COLOR, COLOR, 0xff).setLight(packedLight);
-        poseStack.popPose();
     }
 
     @Override

@@ -26,31 +26,31 @@ public class BlockStates extends BlockStateProvider {
         logBlock(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG.get());
         logBlock(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG.get());
         logBlock(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG.get());
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_OAK_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_OAK_LOG));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_OAK_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_OAK_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_SPRUCE_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_BIRCH_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_JUNGLE_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_ACACIA_LOG));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_LOG));
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS.get());
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS.get());
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS.get());
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS.get());
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS.get());
         simpleBlock(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS.get());
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS));
-        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS.get(), simpleBlockItemModel(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_OAK_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_SPRUCE_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS));
+        simpleBlockItem(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS.get(), getBlockModel(BlockRegistry.LIGHTNING_POWERED_DARK_OAK_PLANKS));
     }
 
     private static String path(DeferredHolder<?, ?> holder) {
         return holder.getId().getPath();
     }
 
-    private ModelFile simpleBlockItemModel(DeferredBlock<?> block) {
-        return models().withExistingParent(path(block), block.getId());
+    private ModelFile getBlockModel(DeferredBlock<?> block) {
+        return models().getBuilder(path(block));
     }
 }

@@ -16,10 +16,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.VanillaGameEvent;
+import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.Map;
@@ -36,6 +36,24 @@ public class LightningStrikeHandler {
     );
 
     @SubscribeEvent
+    public static void onEntityStruckByLightning(EntityStruckByLightningEvent event) {
+        if (event.getEntity() instanceof ItemEntity entity) {
+            var level = entity.level();
+            var ench = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(Enchantments.LIGHTNING_POWERED);
+            ItemStack is = entity.getItem();
+            if (level.random.nextInt(5) == 0 && is.supportsEnchantment(ench)) {
+                entity.setInvulnerable(true);
+                int lvl = is.getEnchantmentLevel(ench);
+                if (lvl < 5) {
+                    is.enchant(ench, lvl + 1);
+                }
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onVanillaGameEvent(VanillaGameEvent event) {
         if (event.getVanillaEvent() == GameEvent.LIGHTNING_STRIKE) {
             var lightningPos = event.getEventPosition();
@@ -45,25 +63,6 @@ public class LightningStrikeHandler {
                 if (level.getBlockState(pos.move(Direction.DOWN)).is(BlockTags.CAN_BE_LIGHTNING_POWERED_LOGS)) {
                     spreadStrike(level, pos);
                     break;
-                }
-            }
-            var lookup = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-            var ench = lookup.getOrThrow(Enchantments.LIGHTNING_POWERED);
-            for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(
-                    lightningPos.x - 1.5,
-                    lightningPos.y,
-                    lightningPos.z - 1.5,
-                    lightningPos.x + 1.5,
-                    lightningPos.y - 3,
-                    lightningPos.z + 1.5
-            ))) {
-                item.invulnerableTime = 20;
-                ItemStack is = item.getItem();
-                if (level.random.nextInt(3) == 0 && is.supportsEnchantment(ench)) {
-                    int lvl = is.getEnchantmentLevel(ench);
-                    if (lvl < 5) {
-                        is.enchant(ench, lvl + 1);
-                    }
                 }
             }
         }
