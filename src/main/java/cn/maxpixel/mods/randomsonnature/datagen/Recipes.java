@@ -40,6 +40,14 @@ public class Recipes extends RecipeProvider {
                 .pattern("#")
                 .unlockedBy("has_stick", has(Items.STICK))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistry.WIND_TUNNEL_CONTROLLER)
+                .define('#', Items.GRAY_CONCRETE)
+                .define('X', Items.PISTON)
+                .pattern("###")
+                .pattern("#X#")
+                .pattern("###")
+                .unlockedBy("has_piston", has(Items.PISTON))
+                .save(output);
     }
 
     private static void planksFromLightningPoweredLog(RecipeOutput output, ItemLike planks, ItemLike logs) {
