@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -38,17 +39,18 @@ public class LightningStrikeHandler {
     @SubscribeEvent
     public static void onEntityStruckByLightning(EntityStruckByLightningEvent event) {
         if (event.getEntity() instanceof ItemEntity entity) {
-            var level = entity.level();
-            var ench = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                    .getOrThrow(Enchantments.LIGHTNING_POWERED);
-            ItemStack is = entity.getItem();
-            if (level.random.nextInt(5) == 0 && is.supportsEnchantment(ench)) {
-                entity.setInvulnerable(true);
-                int lvl = is.getEnchantmentLevel(ench);
-                if (lvl < 5) {
-                    is.enchant(ench, lvl + 1);
+            if (entity.getRandom().nextInt(5) == 0) {
+                var ench = entity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                        .getOrThrow(Enchantments.LIGHTNING_POWERED);
+                ItemStack is = entity.getItem();
+                if (is.supportsEnchantment(ench)) {
+                    entity.setInvulnerable(true);
+                    int lvl = is.getEnchantmentLevel(ench);
+                    if (lvl < 5) {
+                        is.enchant(ench, lvl + 1);
+                    }
+                    event.setCanceled(true);
                 }
-                event.setCanceled(true);
             }
         }
     }
@@ -61,15 +63,14 @@ public class LightningStrikeHandler {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(lightningPos.x, lightningPos.y, lightningPos.z);
             for (int i = 0; i <= 3; i++) {
                 if (level.getBlockState(pos.move(Direction.DOWN)).is(BlockTags.CAN_BE_LIGHTNING_POWERED_LOGS)) {
-                    spreadStrike(level, pos);
+                    spreadStrike(level, pos, event.getCause().getRandom());
                     break;
                 }
             }
         }
     }
 
-    private static void spreadStrike(Level level, BlockPos.MutableBlockPos lightningPos) {
-        var random = level.random;
+    private static void spreadStrike(Level level, BlockPos.MutableBlockPos lightningPos, RandomSource random) {
         for (var pos : BlockPos.betweenClosed(
                 lightningPos.getX() - 1,
                 Mth.clamp(lightningPos.getY() - 10, level.getMinBuildHeight(), level.getMaxBuildHeight()),

@@ -49,5 +49,6 @@ public class RONBlockTagsProvider extends BlockTagsProvider {
         tag(MINEABLE_WITH_AXE).addTag(BlockTags.LIGHTNING_POWERED_LOGS)
                 .addTag(BlockTags.LIGHTNING_POWERED_PLANKS);
         tag(LOGS).addTag(BlockTags.LIGHTNING_POWERED_LOGS);
+        tag(PLANKS).addTag(BlockTags.LIGHTNING_POWERED_PLANKS);
     }
 }

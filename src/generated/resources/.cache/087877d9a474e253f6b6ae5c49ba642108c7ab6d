@@ -1,4 +1,6 @@
-// 1.21.1	2024-10-02T11:08:18.7068366	Tags for minecraft:item mod id randomsonnature
+// 1.21.1	2024-10-07T20:23:56.1300564	Tags for minecraft:item mod id randomsonnature
+a7bce5858935134c1a2d2c6a57d786679e12415e data/minecraft/tags/item/logs.json
+ea2dc35375bf44cbbcaa673c151fed3a129c2a8c data/minecraft/tags/item/planks.json
 cc9b033af42ca8965853b64e96e9065bded6f6f9 data/randomsonnature/tags/item/can_be_lightning_powered_logs.json
 9f82832981c577cf63f96204d76df781b2bee148 data/randomsonnature/tags/item/can_be_lightning_powered_weapons.json
 17d8c6092c8e7365742fbdaddecada334960601d data/randomsonnature/tags/item/lightning_powered_logs.json

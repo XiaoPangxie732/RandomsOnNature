@@ -41,6 +41,8 @@ public class RandomsOnNatureMod {
                 output.accept(BlockRegistry.LIGHTNING_POWERED_JUNGLE_PLANKS);
                 output.accept(BlockRegistry.LIGHTNING_POWERED_BIRCH_PLANKS);
                 output.accept(BlockRegistry.LIGHTNING_POWERED_ACACIA_PLANKS);
+                output.accept(ItemRegistry.LIGHTNING_POWERED_WOODEN_AXE);
+                output.accept(ItemRegistry.LIGHTNING_POWERED_WOODEN_SWORD);
             }).build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.

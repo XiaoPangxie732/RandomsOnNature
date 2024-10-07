@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.minecraft.tags.ItemTags.LOGS;
+import static net.minecraft.tags.ItemTags.PLANKS;
+
 public class RONItemTagsProvider extends ItemTagsProvider {
     public RONItemTagsProvider(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> provider, CompletableFuture<TagLookup<Block>> pBlockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(pOutput, provider, pBlockTags, RandomsOnNatureMod.MODID, existingFileHelper);
@@ -23,6 +26,8 @@ public class RONItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.CAN_BE_LIGHTNING_POWERED_LOGS, ItemTags.CAN_BE_LIGHTNING_POWERED_LOGS);
         copy(BlockTags.LIGHTNING_POWERED_LOGS, ItemTags.LIGHTNING_POWERED_LOGS);
         copy(BlockTags.LIGHTNING_POWERED_PLANKS, ItemTags.LIGHTNING_POWERED_PLANKS);
+        tag(LOGS).addTag(ItemTags.LIGHTNING_POWERED_LOGS);
+        tag(PLANKS).addTag(ItemTags.LIGHTNING_POWERED_PLANKS);
         tag(ItemTags.CAN_BE_LIGHTNING_POWERED_WEAPONS).add(
                 Items.DIAMOND_SWORD,
                 Items.STONE_SWORD,

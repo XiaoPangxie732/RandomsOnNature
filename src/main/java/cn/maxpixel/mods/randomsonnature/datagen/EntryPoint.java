@@ -33,6 +33,7 @@ public class EntryPoint {
 
         generator.addProvider(event.includeClient(), new BlockStates(output, efh));
         generator.addProvider(event.includeClient(), new ItemModels(output, efh));
+
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK)
         ), lookup));
@@ -43,5 +44,6 @@ public class EntryPoint {
                         .add(Registries.ENCHANTMENT, Enchantments::addEnchantments),
                 Set.of(RandomsOnNatureMod.MODID)
         ));
+        generator.addProvider(event.includeServer(), new Recipes(output, lookup));
     }
 }
