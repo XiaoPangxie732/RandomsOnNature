@@ -168,7 +168,7 @@ public class WindTunnelControllerBlockEntity extends BlockEntity {
 
     private static void applyMotionToVehicles(WindTunnelControllerBlockEntity be, List<VehicleEntity> vehicles) {
         for (VehicleEntity vehicle : vehicles) {
-            double multiplier = vehicle instanceof Boat ? vehicle.isVehicle() ? 3.0 : 1.7 : 1.5;
+            double multiplier = vehicle instanceof Boat ? vehicle.isVehicle() ? 8.0 : 1.7 : 1.5;
             vehicle.resetFallDistance();
             vehicle.addDeltaMovement(new Vec3(
                     0.0,
